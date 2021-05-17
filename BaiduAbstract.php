@@ -12,7 +12,7 @@
 		const RULES = [
 			'title'    => [ 'h3' , 'text' ] ,
 			'link'     => [ 'h3>a' , 'href' ] ,
-			'abstract' => [ '.c-abstract' , 'text' , '-span,-a' ] ,
+			'abstract' => [ '.c-abstract' , 'text' , '-span' ] ,
 		];
 		const RANGE = '.result';
 		protected $ql;
