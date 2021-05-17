@@ -1,0 +1,21 @@
+{
+  "name": "wangqs/querylist-rule-baidu-abstract",
+  "description": "QueryList Plugin: baidu with abstract. QueryList百度搜索插件,包含了每条结果的文字简介",
+  "require": {
+    "PHP": ">=7.0"
+  },
+  "require-dev": {
+    "jaeger/querylist": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "QL\\Ext\\": ""
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "wangqs"
+    }
+  ]
+}
