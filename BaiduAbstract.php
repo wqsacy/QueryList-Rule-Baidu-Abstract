@@ -15,7 +15,15 @@
 			'abstract' => [ '.c-abstract' , 'text' , '-span' ] ,
 		];
 		const RANGE = '.result';
+		
+		const RULES2 = [
+			'word'    => [ 'a' , 'text' ] ,
+			'link'    => [ 'a' , 'href' ] ,
+		];
+		const RANGE2 = '#rs .new-inc-rs-table th';
+		
 		protected $ql;
+		protected $ql2;
 		protected $keyword;
 		protected $pageNumber = 10;
 		protected $httpOpt = [
@@ -28,6 +36,9 @@
 		public function __construct ( QueryList $ql , $pageNumber ) {
 			$this->ql = $ql->rules( self::RULES )
 			               ->range( self::RANGE );
+			
+			$this->ql2 = $ql->rules( self::RULES2 )
+			               ->range( self::RANGE2 );
 			$this->pageNumber = $pageNumber;
 		}
 
@@ -49,14 +60,34 @@
 			return $this;
 		}
 
-		public function page ( $page = 1 , $realURL = false ) {
-			return $this->query( $page )
-			            ->query()
-			            ->getData( function ( $item ) use ( $realURL )
-			            {
-				            $realURL && $item['link'] = $this->getRealURL( $item['link'] );
-				            return $item;
-			            } );
+		public function page ( $page = 1 , $realURL = false , $relSearch=false) {
+			if(!$relSearch){
+				
+				return $this->query( $page )
+				            ->query()
+				            ->getData( function ( $item ) use ( $realURL )
+				            {
+					            $realURL && $item['link'] = $this->getRealURL( $item['link'] );
+					            return $item;
+				            } );
+			}else{
+				
+				return [
+					'search' =>  $this->query( $page )
+					                  ->query()
+					                  ->getData( function ( $item ) use ( $realURL )
+					                  {
+						                  $realURL && $item['link'] = $this->getRealURL( $item['link'] );
+						                  return $item;
+					                  } ),
+					
+					'rel_search' => $this->query2( $page )->query()->getData( function ( $item )
+					{
+						$item['link'] = 'https://www.baidu.com'.$item['link'];
+						return $item;
+					} ),
+				];
+			}
 		}
 
 		protected function query ( $page = 1 ) {
@@ -66,6 +97,15 @@
 				'pn' => $this->pageNumber * ($page - 1)
 			] , $this->httpOpt );
 			return $this->ql;
+		}
+		
+		protected function query2 ( $page = 1 ) {
+			$this->ql2->get( self::API , [
+				'wd' => $this->keyword ,
+				'rn' => $this->pageNumber ,
+				'pn' => $this->pageNumber * ($page - 1)
+			] , $this->httpOpt );
+			return $this->ql2;
 		}
 
 		/**
