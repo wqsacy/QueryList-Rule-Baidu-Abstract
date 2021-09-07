@@ -100,7 +100,7 @@
 			$list = $this->query( 1 )
 				             ->rules( [
 				             	'word' => ['a' , 'text'],
-				             	'link' => ['a' , 'text'],
+				             	'link' => ['a' , 'href'],
 				             ] )
 				             ->range( '#rs table th' )->query()
 				             ->getData( function ( $item )
