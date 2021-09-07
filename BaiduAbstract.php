@@ -111,6 +111,7 @@
 				}
 			}
 			
+			return $list;
 		}
 
 		public function getCount () {
