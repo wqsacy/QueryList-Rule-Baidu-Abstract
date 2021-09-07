@@ -97,22 +97,22 @@
 		}
 
 		public function getRelSearch ($needLink=false) {
-			if($needLink){
-				$list = $this->query( 1 )
-				             ->rules( [
-					             'word' => ['a' , 'text'],
-					             'link' => ['a' , 'href'],
-				             ] )
-				             ->range( '#rs table th' )->queryData();
-				
-				
-				if($list && is_array($list) && count($list)){
-					foreach ( $list as $key => $val ) {
+			
+			$list = $this->query( 1 )
+			             ->rules( [
+				             'word' => ['a' , 'text'],
+				             'link' => ['a' , 'href'],
+			             ] )
+			             ->range( '#rs table th' )->queryData();
+			
+			if($list && is_array($list) && count($list)){
+				foreach ( $list as $key => $val ) {
+					if($needLink){
 						$list[$key]['link'] = 'https://www.baidu.com'.$val['link'];
+					}else{
+						unset($list[$key]['link']);
 					}
 				}
-			}else{
-				$list = $this->query( 1 )->find('#rs table th a')->texts();
 			}
 			
 			return $list;
