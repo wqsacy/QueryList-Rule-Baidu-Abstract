@@ -105,17 +105,20 @@
 			             ] )
 			             ->range( '#rs table th' )->queryData();
 			
+			if(!$needLink){
+				$new = [];
+			}
 			if($list && is_array($list) && count($list)){
 				foreach ( $list as $key => $val ) {
 					if($needLink){
 						$list[$key]['link'] = 'https://www.baidu.com'.$val['link'];
 					}else{
-						unset($list[$key]['link']);
+						$new[] = $list[$key]['word'];
 					}
 				}
 			}
 			
-			return $list;
+			return $needLink?$list:$new;
 		}
 
 		public function getCount () {
