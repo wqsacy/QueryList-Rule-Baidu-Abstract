@@ -102,16 +102,16 @@
 				             	'word' => ['a' , 'text'],
 				             	'link' => ['a' , 'text'],
 				             ] )
-				             ->range( '#rs table th' )->queryData();
+				             ->range( '#rs table th' )->query()
+				             ->getData( function ( $item )
+				             {
+					             $item['link'] = $this->getRealURL( $item['link'] );
+					             return $item;
+				             } );
 			
 			
-			if($list && is_array($list) && count($list)){
-				foreach ( $list as $key => $val ) {
-					$list[$key]['link'] = 'https://www.baidu.com'.$val['link'];
-				}
-			}
 			
-			return $list;
+			return $list->all();
 		}
 
 		public function getCount () {
