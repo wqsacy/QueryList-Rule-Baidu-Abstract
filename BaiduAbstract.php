@@ -49,14 +49,21 @@
 			return $this;
 		}
 
-		public function page ( $page = 1 , $realURL = false ) {
-			return $this->query( $page )
+		public function page ( $page = 1 , $realURL = false , $realSearch = false) {
+			$data =  $this->query( $page )
 			            ->query()
 			            ->getData( function ( $item ) use ( $realURL )
 			            {
 				            $realURL && $item['link'] = $this->getRealURL( $item['link'] );
 				            return $item;
 			            } );
+			
+			if($realSearch){
+				$data['list'] = $data;
+				$data['real_search'] = $this->getRelSearch($page);
+			}
+			
+			return $data;
 		}
 
 		protected function query ( $page = 1 ) {
@@ -96,29 +103,23 @@
 			return $countPage;
 		}
 
-		public function getRelSearch ($needLink=false) {
+		public function getRelSearch ($page=1) {
 			
-			$list = $this->query( 1 )
+			$list = $this->query( $page )
 			             ->rules( [
 				             'word' => ['a' , 'text'],
-				             'link' => ['a' , 'href'],
 			             ] )
 			             ->range( '#rs_new table td' )->queryData();
 			
-			if(!$needLink){
-				$new = [];
-			}
+			$new = [];
+			
 			if($list && is_array($list) && count($list)){
 				foreach ( $list as $key => $val ) {
-					if($needLink){
-						$list[$key]['link'] = 'https://www.baidu.com'.$val['link'];
-					}else{
-						$new[] = $list[$key]['word'];
-					}
+					$new[] = $val['word'];
 				}
 			}
 			
-			return $needLink?$list:$new;
+			return $new;
 		}
 
 		public function getCount () {
