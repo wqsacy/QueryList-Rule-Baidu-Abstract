@@ -50,19 +50,16 @@
 		}
 
 		public function page ( $page = 1 , $realURL = false , $realSearch = false) {
-			$list =  $this->query( $page )
-			            ->query()
-			            ->getData( function ( $item ) use ( $realURL )
-			            {
-				            $realURL && $item['link'] = $this->getRealURL( $item['link'] );
-				            return $item;
-			            } );
+			$data = $this->query( $page )
+			             ->query()
+			             ->getData( function ( $item ) use ( $realURL )
+			             {
+				             $realURL && $item['link'] = $this->getRealURL( $item['link'] );
+				             return $item;
+			             } );
 			
 			if($realSearch){
-				$data['list'] = $list;
-				$data['real_search'] = $this->getRelSearch($page);
-			}else{
-				$data = $list;
+				$data[0]['rel_search'] = $this->getRelSearch($page);
 			}
 			
 			return $data;
