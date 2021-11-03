@@ -103,7 +103,7 @@
 				             'word' => ['a' , 'text'],
 				             'link' => ['a' , 'href'],
 			             ] )
-			             ->range( '#rs table th' )->queryData();
+			             ->range( '#rs_new table td' )->queryData();
 			
 			if(!$needLink){
 				$new = [];
